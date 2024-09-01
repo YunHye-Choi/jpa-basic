@@ -12,22 +12,21 @@ public class JpaMain {
         tx.begin();
 
         try{
-            // 회원 추가
+            // 비영속 상태
             Member member = new Member();
             member.setId(1L);
             member.setName("Anne");
+
+            // 영속 상태 - 이 시점에는 쿼리가 실행되지 않음!
             em.persist(member);
 
-            // 회원 수정
-//            Member findMember = em.find(Member.class, 1L);
-//            findMember.setName("Joy");
+            tx.commit(); // 이 시점에 쿼리가 날아감!
 
-            // 회원 삭제
-//            Member findMember = em.find(Member.class, 1L);
-//            em.remove(member);
+            // 준영속 - 회원 엔티티를 영속성 컨텍스트에서 분리
+            em.detach(member);
 
-            // 회원 조회
-//            Member findMember = em.find(Member.class, 1L);
+            // 삭제 - 객체를 삭제한 상태
+            em.remove(member);
 
         } catch (Exception e){
             tx.rollback();
